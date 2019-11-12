@@ -15,33 +15,30 @@ create table coins_value(
     value integer check(value >= 0)
 );
 
-create table machine(                   --создаем таблицу ассортимента автомата
-	id serial primary key,              --айдишник каждого элемента
-	drink varchar (20) not null,        --тип напитка
-	count integer check(count >= 0),    --кол-во напитков доступных для продажи
-	price integer                       --цена напитка
+create table machine(
+	id serial primary key,
+	drink varchar (20) not null,
+	count integer check(count >= 0),
+	price integer
 );
 create index IX_machine_drink on machine(drink);
 create index IX_machine_count on machine(count);
 create index IX_machine_price on machine(price);
 
- 
 
-create table machine_wallet(            --создаем таблицу кошелька автомата
-	FK_machine_wallet_id integer,          
-	--value integer check(value >= 0),    --виды купюр(10,5,2,1)
+create table machine_wallet(
+	FK_machine_wallet_id integer,
 	count integer check(count >= 0),
 	foreign key (FK_machine_wallet_id)
 	references coins_value(PK_coins_value_id) on delete cascade
 );
- 
+
 
 create index IX_machine_wallet_value on machine_wallet(FK_machine_wallet_id);
 
 
-create table my_wallet(                 --аналогично создаем кошелек для пользователя
-	FK_my_wallet_id integer,	
-    --value integer check(value >= 0),
+create table my_wallet(
+	FK_my_wallet_id integer,
 	count integer check(count >= 0),
 	foreign key (FK_my_wallet_id)
 	references coins_value(PK_coins_value_id) on delete cascade
@@ -60,16 +57,5 @@ insert into coins_value(value) values(1);
 
 insert into machine_wallet select PK_coins_value_id as FK_machine_wallet_id, 0 as count from coins_value;
 insert into my_wallet select PK_coins_value_id as FK_my_wallet_id, 0 as count from coins_value;
-
-/*insert into machine_wallet(value, count) values(10, 0);
-insert into machine_wallet(value, count) values(5, 0);
-insert into machine_wallet(value, count) values(2, 0);
-insert into machine_wallet(value, count) values(1, 0);
-
-insert into my_wallet(value, count) values(10, 0);
-insert into my_wallet(value, count) values(5, 0);
-insert into my_wallet(value, count) values(2, 0);
-insert into my_wallet(value, count) values(1, 0);
-*/
 
 update machine_wallet set count = 10 where count = 0;

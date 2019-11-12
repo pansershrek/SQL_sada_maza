@@ -1,6 +1,6 @@
---DROP FUNCTION if exists sell;
+DROP FUNCTION if exists sell;
 CREATE FUNCTION sell(coin_value integer) returns void AS
-$$ 
+$$
 begin
 UPDATE my_wallet
 SET COUNT = COUNT + 1
